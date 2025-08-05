@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 //Routes
 app.use('/user-auth',require('./routes/userAuth'));
-
+app.use('/resume',require('./routes/resume'));
 
 
 
