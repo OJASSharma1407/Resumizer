@@ -4,7 +4,7 @@ const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Resume = require('../models/GetResume');
 const ResumeOperation = require('../models/ResumeOperation');
-const CoverLetter = require('../models/CoverLetter');
+const PDFDocument = require('pdfkit');
 const { CohereClient } = require('cohere-ai');
 
 const cohere = new CohereClient({
@@ -96,56 +96,6 @@ ${education.map((edu) => (
   }
 });
 
-//-------Cover Letter Route-------//
-router.post('/get-cover-letter', fetchuser, async (req, res) => {
-  const { description } = req.body;
 
-  // Handle missing data
-  if (!description || typeof description !== 'string' || description.trim() === '') {
-    return res.status(400).json({ error: "Please provide a valid 'description' field." });
-  }
-
-  try {
-    const prompt = `
-You are an expert professional cover letter writer. Based on the following candidate information, write a clean, properly formatted cover letter.
-
-STRICT RULES:
-- ONLY output a clean cover letter.
-- DO NOT include any commentary, explanation, or extra text before or after the letter.
-- Use proper formatting, spacing, line breaks, and bullet points.
-- Maintain a professional and concise tone.
-- DO NOT include phrases like "Here is the candidate’s data", "Let me know if you want changes", etc.
-- DO NOT add instructions, notes, or closing sentences outside the cover letter.
-
-------------------------------
-${description}
-`;
-
-    const response = await cohere.generate({
-      model: 'command',
-      prompt,
-      max_tokens: 800,
-      temperature: 0.7,
-    });
-
-    const coverLetter = response.generations?.[0]?.text?.trim();
-
-    if (!coverLetter) {
-      return res.status(500).json({ error: "Failed to generate cover letter from Cohere." });
-    }
-
-    const newCoverLetter = new CoverLetter({
-      user: req.user.id,
-      coverletter: coverLetter,
-    });
-
-    await newCoverLetter.save();
-    res.status(200).json({ success: true, response: coverLetter });
-
-  } catch (err) {
-    console.error("Cohere error:", err);
-    res.status(500).json({ error: "Something went wrong while generating cover letter." });
-  }
-});
 
 module.exports = router;

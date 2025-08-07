@@ -77,6 +77,71 @@ router.get('/get-resume/:id', fetchuser, async (req, res) => {
     }
 });
 
+// DELETE resume by ID
+router.delete('/delete-resume/:id', fetchuser, async (req, res) => {
+  try {
+    const resume = await GetResume.findOne({ _id: req.params.id, user: req.user.id });
+    if (!resume) {
+      return res.status(404).json({ success: false, error: "Resume not found or unauthorized" });
+    }
+    await resume.deleteOne();
+    res.status(200).json({ success: true, message: "Resume deleted successfully" });
+  } catch (err) {
+    console.error("Delete Resume Error:", err);
+    res.status(500).json({ success: false, error: "Server error while deleting resume" });
+  }
+});
+
+
+//-------------Edit Resume--------------//
+router.put('/edit-resume/:id', fetchuser, async (req, res) => {
+  const resumeId = req.params.id;
+  const {
+    personalInfo,
+    careerObjective,
+    skills,
+    techStack,
+    workExperience,
+    projects,
+    education
+  } = req.body;
+
+  try {
+    let resume = await Resume.findById(resumeId);
+
+    if (!resume) {
+      return res.status(404).json({ success: false, message: "Resume does not exist" });
+    }
+
+    // Ensure the resume belongs to the logged-in user
+    if (resume.user.toString() !== req.user.id) {
+      return res.status(401).json({ success: false, message: "Not authorized" });
+    }
+
+    const updatedFields = {
+      personalInfo,
+      careerObjective,
+      skills,
+      techStack,
+      workExperience,
+      projects,
+      education
+    };
+
+    // Update only fields provided in req.body
+    resume = await Resume.findByIdAndUpdate(
+      resumeId,
+      { $set: updatedFields },
+      { new: true, runValidators: true }
+    );
+
+    res.json({ success: true, resume });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 //--------Build Ai generated Resume------//
 router.post('/build-resume/:id',fetchuser,async(req,res)=>{
  
@@ -98,50 +163,51 @@ router.post('/build-resume/:id',fetchuser,async(req,res)=>{
     } = resume;
 
     const prompt = `
-      I want you to act as a professional resume writer.
-      Write ONLY a clean, properly formatted resume based on the following data.
-      - DO NOT include commentary or explanations.
-      - Use clear section titles like "SUMMARY", "EXPERIENCE", "EDUCATION", etc.
-      - Format with proper spacing, line breaks, and bullet points.
-      - Keep the tone professional and concise.
-      - Do NOT include any closing sentences Not in the start and Not in the end like "Let me know if you want changes."
-            Here is the candidate’s data: or this resume is written in a clean and professional format. 
-            You can customize it based on additional information or requirements if needed, and feel free to ask for adjustments or variations 
-      - The End result should only be a resume do not add any note or anything else in start or in the end JUST RESUME ONLY
-      - Ensure that you follows all these instrunctions
-      ------------------------------
-      Name: ${personalInfo.name}
-      Email: ${personalInfo.email}
-      Phone: ${personalInfo.phone}
-      GitHub: ${personalInfo.github}
-      LinkedIn: ${personalInfo.linkedIn}
+You are a professional resume writer.
 
-      Career Objective: ${careerObjective}
+Your task is to generate ONLY a clean, properly formatted **resume** using the data provided below.
 
-      Skills: ${skills.join(', ')}
-      Tech Stack: ${techStack.join(', ')}
+⚠️ STRICT INSTRUCTIONS — DO NOT IGNORE:
+- The output MUST contain only the resume — absolutely NO commentary, notes, explanations, or extra text at the beginning or end.
+- DO NOT write anything like “Here is the resume”, “You can edit it”, or “Let me know if you want changes”.
+- DO NOT add quotes or remarks around any section.
+- MAKE SURE it has good format 
+- Use professional tone, spacing, bullet points, and clean layout.
+- Ensure readability with proper line breaks.
+- Stick ONLY to the candidate's data — NO assumptions or creative additions.
 
-      Work Experience:
-      ${workExperience.map((exp, i) => (
-        `• Role: ${exp.role}, Duration: ${exp.duration}
-        Description: ${exp.description}`
-      )).join("\n")}
+==========================
+CANDIDATE DETAILS:
+Name: ${personalInfo.name}
+Email: ${personalInfo.email}
+Phone: ${personalInfo.phone}
+GitHub: ${personalInfo.github}
+LinkedIn: ${personalInfo.linkedIn}
 
-      Projects:
-      ${projects.map((proj, i) => (
-        `• ${proj.title}: ${proj.description} (Link: ${proj.link})`
-      )).join("\n")}
+Career Objective: ${careerObjective}
 
-      Education:
-      ${education.map((edu) => (
-        `• ${edu.degree} in ${edu.fieldOfStudy} from ${edu.institution} (${edu.startYear} - ${edu.endYear})`
-      )).join("\n")}
+Skills: ${skills.join(', ')}
+Tech Stack: ${techStack.join(', ')}
 
-      ------------------------------
+Work Experience:
+${workExperience.map((exp) => (
+  `• ${exp.role} (${exp.duration}) – ${exp.company || 'N/A'}
+  ${exp.description}`
+)).join("\n")}
 
-      Now, write a clean, professional resume based on this info. Format each section with bullet points where needed, use professional tone, and enhance the experience descriptions.
-      `;
+Projects:
+${projects.map((proj) => (
+  `• ${proj.title}: ${proj.description} (Link: ${proj.link})`
+)).join("\n")}
 
+Education:
+${education.map((edu) => (
+  `• ${edu.degree} in ${edu.fieldOfStudy} from ${edu.institution} (${edu.startYear} – ${edu.endYear})`
+)).join("\n")}
+==========================
+
+Now return ONLY the resume I REPEAT ONLY RESUME ON EXTRA THINGS IN THE RESPONSE CUS I HAVE TO CONVERT IT INTO A PDF — no intro, no outro, no suggestions. Just the resume.
+`;
       const response = await cohere.generate({
         model: 'command',
         prompt: prompt,

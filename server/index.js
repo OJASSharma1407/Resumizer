@@ -13,7 +13,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Routes
 app.use('/user-auth',require('./routes/userAuth'));
 app.use('/resume',require('./routes/resume'));
-app.use('/resume',require('./routes/resumeFeedback'));
+app.use('/aboutResume',require('./routes/resumeFeedback'));
+app.use('/coverletter',require('./routes/coverletter'));
 
 
 //app listning on port 5000
