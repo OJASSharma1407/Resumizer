@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const ResumeSchema = new mongoose.Schema({
   user:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'User'
+    ref:'User',
+    required:true
   },
   personalInfo: {
     name: { type: String, required: true },
@@ -52,4 +53,4 @@ const ResumeSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Resume', ResumeSchema);
+module.exports = mongoose.model('GetResume', ResumeSchema);
