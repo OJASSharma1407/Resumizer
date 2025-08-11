@@ -4,7 +4,6 @@ const router = express.Router();
 const fetchuser = require('../middleware/fetchuser');
 const Resume = require('../models/GetResume');
 const ResumeOperation = require('../models/ResumeOperation');
-const PDFDocument = require('pdfkit');
 const { CohereClient } = require('cohere-ai');
 
 const cohere = new CohereClient({
