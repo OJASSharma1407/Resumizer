@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ResumeOperationSchema = new mongoose.Schema({
     resume: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Resume",
+        ref: "GetResume",
         required: true
     },
     user: {

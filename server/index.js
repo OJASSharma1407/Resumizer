@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 5000;
 const path = require('path'); 
+const cors =  require("cors");
+app.use(cors());
 //middleWare
 app.use(express.json());
 

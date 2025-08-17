@@ -95,6 +95,19 @@ ${education.map((edu) => (
   }
 });
 
+// Get all AI-generated resumes for the logged-in user
+router.get('/get-ai-resumes', fetchuser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const aiResumes = await ResumeOperation.find({ user: userId }).populate('resume');
+    res.status(200).json({ success: true, aiResumes });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: "Server error while fetching AI resumes" });
+  }
+});
+
+
 
 
 module.exports = router;

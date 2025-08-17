@@ -13,6 +13,8 @@ const cohere = new CohereClient({
 //--------Add Resume info--------//
 router.post('/add-resume-info', fetchuser, async (req, res) => {
   try {
+    console.log("Incoming body:", req.body);
+    
     const {
       personalInfo,
       careerObjective,
@@ -46,6 +48,7 @@ router.post('/add-resume-info', fetchuser, async (req, res) => {
 //--------get Resume info--------//
 router.get('/get-resumes', fetchuser, async (req, res) => {
     const userId = req.user.id;
+    
   try {
     
     const userResumes = await Resume.find({user:userId});
@@ -80,7 +83,7 @@ router.get('/get-resume/:id', fetchuser, async (req, res) => {
 // DELETE resume by ID
 router.delete('/delete-resume/:id', fetchuser, async (req, res) => {
   try {
-    const resume = await GetResume.findOne({ _id: req.params.id, user: req.user.id });
+    const resume = await Resume.findOne({ _id: req.params.id, user: req.user.id });
     if (!resume) {
       return res.status(404).json({ success: false, error: "Resume not found or unauthorized" });
     }
@@ -173,8 +176,9 @@ Your task is to generate ONLY a clean, properly formatted **resume** using the d
 - DO NOT add quotes or remarks around any section.
 - MAKE SURE it has good format 
 - Use professional tone, spacing, bullet points, and clean layout.
-- Ensure readability with proper line breaks.
+- Ensure readability with proper line breaks and gaps between lines.
 - Stick ONLY to the candidate's data — NO assumptions or creative additions.
+-Add lines between diffrent sections to keep a proper seperation and format.
 
 ==========================
 CANDIDATE DETAILS:

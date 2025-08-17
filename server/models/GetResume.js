@@ -34,13 +34,13 @@ const ResumeSchema = new mongoose.Schema({
   }],
 
   projects: [{
-    title: { type: String, required: true },
+    title: { type: String },
     description: { type: String },
     link: { type: String }
   }],
 
   education: [{
-    institution: { type: String, required: true },
+    institution: { type: String },
     degree: { type: String },
     fieldOfStudy: { type: String },
     startYear: { type: String },
