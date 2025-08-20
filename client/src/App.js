@@ -27,7 +27,7 @@ function App() {
           <Route path="/build-cover-letter" element={<Buildcoverletter />} />
           <Route path="/view-cover-letter" element={<Viewcoverletter />} />  
           <Route path="/edit-resume/:id" element={<Editresume />} />  
-          <Route path="/view-ai-resume" element={<AIresume/>}/>               
+          <Route path="/view-ai-resume/:id" element={<AIresume/>}/>               
         </Route>
       </Route>
     </Routes>

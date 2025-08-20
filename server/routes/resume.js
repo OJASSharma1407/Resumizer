@@ -234,7 +234,7 @@ Now return ONLY the resume I REPEAT ONLY RESUME ON EXTRA THINGS IN THE RESPONSE 
 //------Download Resume--------//
 router.get('/download-resume/:id', fetchuser, async (req, res) => {
   try {
-    const resumeOp = await ResumeOperation.findById(req.params.id );
+    const resumeOp = await ResumeOperation.findById(req.params.id);
 
     if (!resumeOp) {
       return res.status(404).json({ success: false, error: "Refined resume not found" });
@@ -242,11 +242,25 @@ router.get('/download-resume/:id', fetchuser, async (req, res) => {
 
     const doc = new PDFDocument();
 
+    // Dynamic filename -> resume-<timestamp>.pdf
+    const fileName = `resume-${Date.now()}.pdf`;
+
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=refined-resume.pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+
+    // Clean & normalize text
+    const cleanText = (resumeOp.refinedResume || "No content found")
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n");
 
     doc.pipe(res);
-    doc.fontSize(12).text(resumeOp.refinedResume || 'No content found');
+    doc.font("Times-Roman")
+       .fontSize(12)
+       .text(cleanText, {
+         align: "left",
+         lineGap: 3
+       });
+
     doc.end();
 
   } catch (err) {

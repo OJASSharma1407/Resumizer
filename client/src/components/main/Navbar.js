@@ -26,7 +26,6 @@ export default function Navbar() {
   const navItems = [
     { name: "Build Resume", path: "/build-resume" },
     { name: "Resumes", path: "/view-resume" },
-    { name: "AI resumes", path: "/view-ai-resume" },
     { name: "Build CoverLetter", path: "/build-cover-letter" },
     { name: "CoverLetters", path: "/view-cover-letter" },
     { name: "Logout", handler: handleLogout }

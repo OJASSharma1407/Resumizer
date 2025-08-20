@@ -1,133 +1,124 @@
+import { Key } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-export default function AIresume() {
+export default function ViewAIResume() {
+  const { id } = useParams(); // grab resumeId from URL
   const [aiResumes, setAiResumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-
-  // Show temporary messages
-  const showMessage = (msg) => {
-    setMessage(msg);
-    setTimeout(() => setMessage(""), 3000);
-  };
-
-  // Fetch all AI-generated resumes for the logged-in user
-  const fetchAIResumes = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/aboutResume/get-ai-resumes", {
-        headers: { "auth-token": localStorage.getItem("token") || "" },
-      });
-
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-      const data = await res.json();
-
-      if (data.success) {
-        setAiResumes(data.aiResumes || []);
-      } else {
-        showMessage(data.error || "Failed to fetch AI resumes");
-      }
-    } catch (err) {
-      console.error(err);
-      showMessage("Server error while fetching AI resumes");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchAIResumes = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/aboutResume/get-ai-resume/${id}`, {
+          headers: { "auth-token": localStorage.getItem("token") ||" " },
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          setAiResumes(data);
+        } else {
+          setMessage(data.message || "Failed to fetch AI resumes");
+        }
+      } catch (error) {
+        console.error(error);
+        setMessage("⚠️ Server error while fetching AI resumes");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAIResumes();
-  }, []);
+  }, [id]);
 
-  // Download PDF of the refined resume
-  const downloadPDF = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:5000/resume/download-resume/${id}`, {
-        headers: { "auth-token": localStorage.getItem("token") || "" },
-      });
+  if (loading) return <div className="text-center mt-20">Loading AI resumes...</div>;
 
-      if (!res.ok) throw new Error("Failed to download PDF");
+  const downloadAIResume = async (resumeOpId) => {
+  try {
+    const res = await fetch(`http://localhost:5000/resume/download-resume/${resumeOpId}`, {
+      method: "GET",
+      headers: { "auth-token": localStorage.getItem("token") },
+    });
 
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ai-resume.pdf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-      alert("Error downloading PDF. Make sure you are logged in.");
+    if (!res.ok) {
+      throw new Error("Failed to download resume");
     }
-  };
 
-  if (loading)
-    return (
-      <div className="text-center mt-20 text-lg font-medium">
-        Loading AI resumes...
-      </div>
-    );
+    // Convert response to blob
+    const blob = await res.blob();
+
+    // Create a URL for the blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a temporary <a> tag to trigger download
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "refined-resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Error downloading resume:", err);
+    alert("⚠️ Error while downloading resume");
+  }
+};
+
 
   return (
-          <div className="pt-20 max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
-        <h2 className="text-4xl font-extrabold mb-12 text-center text-indigo-700">
-          AI Generated Resumes
-        </h2>
+    <div className="pt-20 max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen">
+      <h2 className="text-3xl font-extrabold mb-8 text-center text-indigo-700">
+        AI Generated Resumes
+      </h2>
 
-        {message && (
-          <div className="mb-6 p-4 rounded-lg text-center bg-indigo-100 text-indigo-800 font-medium shadow transition-all duration-300">
-            {message}
-          </div>
-        )}
+      {message && (
+        <div className="mb-6 p-4 rounded-lg bg-red-100 text-red-800 font-medium text-center shadow">
+          {message}
+        </div>
+      )}
 
-        {aiResumes.length === 0 && !loading && (
-          <div className="text-center text-gray-600 text-lg">
-            No AI resumes found. Generate one first!
-          </div>
-        )}
-
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {aiResumes.map((resumeOp) => (
+      {aiResumes.length === 0 ? (
+        <div className="text-center text-gray-600 text-lg">
+          No AI resumes generated yet.
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {aiResumes.map((resume) => (
             <div
-              key={resumeOp._id}
-              className="bg-white shadow-md rounded-2xl p-6 flex flex-col justify-between transform transition hover:scale-105 hover:shadow-xl"
+              className="bg-white shadow-md rounded-lg p-6 border border-gray-200"
             >
-              <div>
-                <h3 className="text-2xl font-semibold text-gray-800 mb-2 truncate">
-                  {resumeOp.resume?.personalInfo?.name || "Unnamed AI Resume"}
-                </h3>
-                <p className="text-gray-600 flex items-center mb-1">
-                  <strong className="mr-1">Generated for:</strong>{" "}
-                  <a
-                    href={`mailto:${resumeOp.resume?.personalInfo?.email}`}
-                    className="text-indigo-600 hover:underline"
-                  >
-                    {resumeOp.resume?.personalInfo?.email || "-"}
-                  </a>
-                </p>
-                <p className="text-gray-600 flex items-center mb-1">
-                  <strong className="mr-1">Date:</strong>{" "}
-                  {resumeOp.resume?.createdAt
-                    ? new Date(resumeOp.resume.createdAt).toLocaleString()
-                    : "-"}
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <button
-                  onClick={() => downloadPDF(resumeOp._id)}
-                  className="w-full px-4 py-2 bg-indigo-600 text-white font-medium rounded-xl shadow hover:bg-indigo-700 transition duration-300"
-                >
-                  View / Download PDF
-                </button>
-              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Generated on: {new Date(resume.cretated_at).toLocaleString()}
+              </h3>
+              <p className="text-gray-800 mb-2">
+                <strong>Refined Resume:</strong>
+              </p>
+              <pre className="whitespace-pre-wrap bg-gray-200 p-4 rounded text-gray-800">
+                {resume.refinedResume || "Not available"}
+              </pre>
+              <button
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg m-2 shadow text-center hover:bg-indigo-700 transition"
+              onClick={()=>downloadAIResume(resume._id)}>
+                Download Resume
+              </button>
+              
             </div>
           ))}
         </div>
-      </div>
+      )}
 
+      <div className="mt-8 text-center">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+        >
+          🔙 Back
+        </button>
+      </div>
+    </div>
   );
 }

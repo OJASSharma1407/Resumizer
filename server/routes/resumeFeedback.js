@@ -96,16 +96,28 @@ ${education.map((edu) => (
 });
 
 // Get all AI-generated resumes for the logged-in user
-router.get('/get-ai-resumes', fetchuser, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const aiResumes = await ResumeOperation.find({ user: userId }).populate('resume');
-    res.status(200).json({ success: true, aiResumes });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: "Server error while fetching AI resumes" });
-  }
+router.get('/get-ai-resume/:id', fetchuser, async (req, res) => {
+  const userId = req.user.id;
+  const resumeId = req.params.id;
+  try{
+    if(!resumeId){
+      return res.status(404).send("Resume not found");
+    }
+
+    const resume  = await ResumeOperation.find({ resume: resumeId, user: userId })
+
+      .populate("resume")
+      .populate("user","name email");
+
+    if(!resume || resume.length === 0 ){
+      return res.status(404).send("No resume found");
+    }
+    res.status(200).json(resume);
+ }catch(err){
+  res.status(400).json({error:err.message});
+ }
 });
+
 
 
 

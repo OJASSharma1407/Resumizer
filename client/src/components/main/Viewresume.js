@@ -76,6 +76,10 @@ export default function AllResumes() {
     }
   };
 
+  const downloadResume = async (id) => {
+    navigate(`/view-ai-resume/${id}`)
+  };
+
   if (loading)
     return (
       <div className="text-center mt-20 text-lg font-medium">
@@ -104,7 +108,6 @@ export default function AllResumes() {
       <div className="grid md:grid-cols-2 gap-6">
         {resumes.map((resume) => (
           <div
-            key={resume._id}
             className="bg-white shadow-lg rounded-xl p-6 flex flex-col justify-between"
           >
             <div>
@@ -148,6 +151,13 @@ export default function AllResumes() {
                 className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition font-medium"
               >
                 Delete
+              </button>
+
+              <button
+                onClick={() => downloadResume(resume._id)}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition font-medium"
+              >
+                Download/View Resume
               </button>
             </div>
           </div>
