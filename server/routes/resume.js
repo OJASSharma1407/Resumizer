@@ -165,20 +165,19 @@ router.post('/build-resume/:id',fetchuser,async(req,res)=>{
       education
     } = resume;
 
-    const prompt = `
-You are a professional resume writer.
+const prompt = `
+You are not a chatbot. You are a professional resume formatter.
 
-Your task is to generate ONLY a clean, properly formatted **resume** using the data provided below.
+⚠️ Your output must be ONLY the resume. No extra sentences, no introductions, no closing remarks, no commentary.
+Do not say "Here is...", "I hope...", "Let me know...", or anything similar.
+Do not add quotes or explanations.
+Do not output anything except the formatted resume.
 
-⚠️ STRICT INSTRUCTIONS — DO NOT IGNORE:
-- The output MUST contain only the resume — absolutely NO commentary, notes, explanations, or extra text at the beginning or end.
-- DO NOT write anything like “Here is the resume”, “You can edit it”, or “Let me know if you want changes”.
-- DO NOT add quotes or remarks around any section.
-- MAKE SURE it has good format 
-- Use professional tone, spacing, bullet points, and clean layout.
-- Ensure readability with proper line breaks and gaps between lines.
-- Stick ONLY to the candidate's data — NO assumptions or creative additions.
--Add lines between diffrent sections to keep a proper seperation and format.
+Format rules:
+- Professional layout with spacing and bullet points
+- Section titles in ALL CAPS (e.g., OBJECTIVE, SKILLS, EDUCATION)
+- Use clear line breaks between sections
+- Use only the candidate’s data provided
 
 ==========================
 CANDIDATE DETAILS:
@@ -188,10 +187,14 @@ Phone: ${personalInfo.phone}
 GitHub: ${personalInfo.github}
 LinkedIn: ${personalInfo.linkedIn}
 
-Career Objective: ${careerObjective}
+Career Objective:
+${careerObjective}
 
-Skills: ${skills.join(', ')}
-Tech Stack: ${techStack.join(', ')}
+Skills:
+${skills.join(', ')}
+
+Tech Stack:
+${techStack.join(', ')}
 
 Work Experience:
 ${workExperience.map((exp) => (
@@ -210,8 +213,11 @@ ${education.map((edu) => (
 )).join("\n")}
 ==========================
 
-Now return ONLY the resume I REPEAT ONLY RESUME ON EXTRA THINGS IN THE RESPONSE CUS I HAVE TO CONVERT IT INTO A PDF — no intro, no outro, no suggestions. Just the resume.
+⚠️ FINAL RULE:
+Output ONLY the resume content. No greetings. No explanations. No extra text.
 `;
+
+
       const response = await cohere.generate({
         model: 'command',
         prompt: prompt,

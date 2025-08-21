@@ -14,9 +14,6 @@ const ResumeOperationSchema = new mongoose.Schema({
     refinedResume: {
         type: String
     },
-    resumeFeedback: {
-        type: String
-    },
     cretated_at:{
         type: Date,
         default:Date.now

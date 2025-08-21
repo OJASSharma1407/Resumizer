@@ -23,8 +23,7 @@ export default function ViewAIResume() {
           setMessage(data.message || "Failed to fetch AI resumes");
         }
       } catch (error) {
-        console.error(error);
-        setMessage("⚠️ Server error while fetching AI resumes");
+        setMessage("No resume Generated");
       } finally {
         setLoading(false);
       }
@@ -68,6 +67,32 @@ export default function ViewAIResume() {
   }
 };
 
+const deleteAiResume = async (resumeId) => {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/aboutResume/delete-ai-resume/${resumeId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "auth-token": localStorage.getItem("token") || " ",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to delete resume");
+    }
+
+    // Update state locally to remove the deleted resume
+    setAiResumes((prev) => prev.filter((resume) => resume._id !== resumeId));
+
+    setMessage("✅ Resume deleted successfully!");
+  } catch (err) {
+    console.error(err);
+    setMessage("⚠️ Server error while deleting AI resume");
+  }
+};
+
 
   return (
     <div className="pt-20 max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen">
@@ -104,6 +129,12 @@ export default function ViewAIResume() {
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg m-2 shadow text-center hover:bg-indigo-700 transition"
               onClick={()=>downloadAIResume(resume._id)}>
                 Download Resume
+              </button>
+
+              <button
+              className="px-4 py-2 bg-red-600 text-white rounded-lg ml-5 shadow text-center hover:bg-red-700 transition"
+              onClick={()=>deleteAiResume(resume._id)}>
+                Delete Resume
               </button>
               
             </div>
