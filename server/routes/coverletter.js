@@ -35,6 +35,7 @@ router.post('/create-cover-letter', fetchuser, async (req, res) => {
   }
 });
 
+
 //--------get coverletter Response------//
 router.post('/generate-cover-letter/:id', fetchuser, async (req, res) => {
   const coverLetterId = req.params.id;
@@ -97,13 +98,14 @@ ${description}
 });
 
 // Get a cover letter by ID (for frontend display)
-router.get('/get-cover-letter/:id', fetchuser, async (req, res) => {
+router.get('/get-cover-letters', fetchuser, async (req, res) => {
+  const userId = req.user.id;
   try {
-    const coverLetter = await CoverLetter.findOne({ _id: req.params.id, user: req.user.id });
-    if (!coverLetter) {
+    const coverLetters = await CoverLetter.find({user:userId});
+    if (!coverLetters) {
       return res.status(404).json({ success: false, error: "Cover letter not found" });
     }
-    res.status(200).json({ success: true, coverLetter });
+    res.status(200).json({ success: true, coverLetters });
   } catch (err) {
     console.error("Get Cover Letter Error:", err);
     res.status(500).json({ success: false, error: "Server error while fetching cover letter" });
@@ -142,6 +144,77 @@ router.delete('/delete-cover-letter/:id', fetchuser, async (req, res) => {
     res.status(500).json({ success: false, error: "Server error while deleting cover letter" });
   }
 });
+
+
+// Delete a cover letter by ID
+router.delete('/delete-cover-letter/:id', fetchuser, async (req, res) => {
+  try {
+    const coverLetter = await CoverLetter.findOne({ _id: req.params.id, user: req.user.id });
+    if (!coverLetter) {
+      return res.status(404).json({ success: false, error: "Cover letter not found" });
+    }
+    await coverLetter.deleteOne();
+    res.status(200).json({ success: true, message: "Cover letter deleted successfully" });
+  } catch (err) {
+    console.error("Delete Cover Letter Error:", err);
+    res.status(500).json({ success: false, error: "Server error while deleting cover letter" });
+  }
+});
+
+
+// ✅ API: Remove only the "coverletter" field
+router.put("/remove-coverletter/:id", fetchuser, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find cover letter belonging to logged-in user
+    let coverLetter = await CoverLetter.findOne({
+      _id: id,
+      user: req.user.id,
+    });
+
+    if (!coverLetter) {
+      return res.status(404).json({ success: false, error: "Cover letter not found" });
+    }
+
+    // Remove only the coverletter field
+    coverLetter.coverletter = undefined;
+
+    await coverLetter.save();
+
+    res.json({
+      success: true,
+      message: "Cover letter content removed, but record kept",
+      coverLetter,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+});
+
+module.exports = router;
+
+
+//-------Get-Ai-CoverLetter----------//
+router.get('/view-ai-coverLetter/:id', fetchuser, async (req, res) => {
+  const letterId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const AIletter = await CoverLetter.findOne({ user: userId, _id: letterId });
+
+    if (!AIletter) {
+      return res.status(404).json({ success: false, error: "Cover letter not found" });
+    }
+
+    res.status(200).json({ success: true, coverLetter: AIletter });
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    res.status(500).json({ success: false, error: "Server error while fetching cover letter" });
+  }
+});
+
 
 //-------Download CoverLetter--------//
 router.get('/download-cover-letter/:id', fetchuser, async (req, res) => {

@@ -10,6 +10,8 @@ import Buildcoverletter from "./components/main/Buildcoverletter";
 import Viewcoverletter from "./components/main/Viewcoverletter";
 import Editresume from "./components/main/Editresume";
 import AIresume from "./components/main/AIresume";
+import EditCoverLetter from "./components/main/EditCoverLetter";
+import ViewAiCoverLetter from "./components/main/AIcoverLetter";
 
 function App() {
   return (
@@ -27,7 +29,9 @@ function App() {
           <Route path="/build-cover-letter" element={<Buildcoverletter />} />
           <Route path="/view-cover-letter" element={<Viewcoverletter />} />  
           <Route path="/edit-resume/:id" element={<Editresume />} />  
-          <Route path="/view-ai-resume/:id" element={<AIresume/>}/>               
+          <Route path="/view-ai-resume/:id" element={<AIresume/>}/>           
+          <Route path="/edit-cover-letter/:id" element={<EditCoverLetter/>}/>
+          <Route path="/view-Aicover-letter/:id" element={<ViewAiCoverLetter/>}/>    
         </Route>
       </Route>
     </Routes>

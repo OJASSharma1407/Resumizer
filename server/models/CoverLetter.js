@@ -10,7 +10,6 @@ const CoverLetterSchema = mongoose.Schema({
         email: { type: String, required: true },
         phone: { type:String, required: true },
         linkedIn: { type: String },
-        github: { type: String },
   },
     description:{
         type:String,
