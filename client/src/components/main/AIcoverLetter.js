@@ -54,7 +54,7 @@ export default function ViewAiCoverLetter() {
       if (!res.ok) throw new Error("Failed to delete cover letter");
 
       setMessage("✅ Cover Letter deleted successfully!");
-      setTimeout(() => navigate("/view-cover-letters"), 1500);
+      setTimeout(() => navigate("/view-cover-letter"), 1500);
     } catch (err) {
       console.error(err);
       setMessage("⚠️ Server error while deleting cover letter");
