@@ -2,7 +2,7 @@ import React, { useEffect,useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate,Link } from "react-router-dom";
 const clientId = process.env.REACT_APP_CLIENT_ID;
-
+const Api = process.env.REACT_APP_API_URL;
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ export default function Login() {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch('http://localhost:5000/user-auth/logIn', {
+    const res = await fetch(`${Api}/user-auth/logIn`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 export default function Editresume() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const Api = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     personalInfo: { name: "", email: "", phone: "", github: "", linkedIn: "" },
     careerObjective: "",
@@ -21,7 +21,7 @@ export default function Editresume() {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/resume/get-resume/${id}`, {
+        const res = await fetch(`${Api}/resume/get-resume/${id}`, {
           headers: { "auth-token": localStorage.getItem("token") },
         });
         const data = await res.json();
@@ -38,7 +38,7 @@ export default function Editresume() {
       }
     };
     fetchResume();
-  }, [id]);
+  }, );
 
   const handleChange = (section, field, value, index = null) => {
     if (Array.isArray(formData[section])) {
@@ -60,7 +60,7 @@ export default function Editresume() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/resume/edit-resume/${id}`, {
+      const res = await fetch(`${Api}/resume/edit-resume/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", "auth-token": localStorage.getItem("token") },
         body: JSON.stringify(formData),

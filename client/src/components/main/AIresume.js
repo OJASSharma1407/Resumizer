@@ -1,4 +1,4 @@
-import { Key } from "lucide-react";
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -7,12 +7,13 @@ export default function ViewAIResume() {
   const [aiResumes, setAiResumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const Api = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAIResumes = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/aboutResume/get-ai-resume/${id}`, {
+        const res = await fetch(`${Api}/aboutResume/get-ai-resume/${id}`, {
           headers: { "auth-token": localStorage.getItem("token") ||" " },
         });
         const data = await res.json();
@@ -30,13 +31,13 @@ export default function ViewAIResume() {
     };
 
     fetchAIResumes();
-  }, [id]);
+  }, );
 
   if (loading) return <div className="text-center mt-20">Loading AI resumes...</div>;
 
   const downloadAIResume = async (resumeOpId) => {
   try {
-    const res = await fetch(`http://localhost:5000/resume/download-resume/${resumeOpId}`, {
+    const res = await fetch(`${Api}/resume/download-resume/${resumeOpId}`, {
       method: "GET",
       headers: { "auth-token": localStorage.getItem("token") },
     });
@@ -70,7 +71,7 @@ export default function ViewAIResume() {
 const deleteAiResume = async (resumeId) => {
   try {
     const res = await fetch(
-      `http://localhost:5000/aboutResume/delete-ai-resume/${resumeId}`,
+      `${Api}/aboutResume/delete-ai-resume/${resumeId}`,
       {
         method: "DELETE",
         headers: {

@@ -7,13 +7,13 @@ export default function ViewAiCoverLetter() {
   const [message, setMessage] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const Api = process.env.REACT_APP_API_URL;
   // ✅ Fetch AI Cover Letter
   useEffect(() => {
     const fetchCoverLetter = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/coverletter/view-ai-coverLetter/${id}`,
+          `${Api}/coverletter/view-ai-coverLetter/${id}`,
           {
             headers: { "auth-token": localStorage.getItem("token") || "" },
           }
@@ -35,7 +35,7 @@ export default function ViewAiCoverLetter() {
     };
 
     fetchCoverLetter();
-  }, [id]);
+  }, );
 
   // ✅ Delete AI Cover Letter
   const deleteCoverLetter = async () => {
@@ -44,7 +44,7 @@ export default function ViewAiCoverLetter() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/coverletter/remove-coverletter/${id}`,
+        `${Api}/coverletter/remove-coverletter/${id}`,
         {
           method: "PUT",
           headers: { "auth-token": localStorage.getItem("token") || "" },
@@ -65,7 +65,7 @@ export default function ViewAiCoverLetter() {
   const downloadCoverLetter = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/coverletter/download-cover-letter/${id}`,
+        `${Api}/coverletter/download-cover-letter/${id}`,
         {
           headers: { "auth-token": localStorage.getItem("token") || "" },
         }

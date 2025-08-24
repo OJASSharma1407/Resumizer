@@ -8,7 +8,7 @@ export default function AllResumes() {
   const [aiLoading, setAiLoading] = useState(false);
   const messageTimeout = useRef(null);
   const navigate = useNavigate();
-
+  const Api = process.env.REACT_APP_API_URL;
   const showMessage = (msg) => {
     setMessage(msg);
     if (messageTimeout.current) clearTimeout(messageTimeout.current);
@@ -17,7 +17,7 @@ export default function AllResumes() {
 
   const fetchResumes = async () => {
     try {
-      const res = await fetch("http://localhost:5000/resume/get-resumes", {
+      const res = await fetch(`${Api}/resume/get-resumes`, {
         headers: { "auth-token": localStorage.getItem("token") },
       });
       const data = await res.json();
@@ -33,13 +33,13 @@ export default function AllResumes() {
 
   useEffect(() => {
     fetchResumes();
-  }, []);
+  }, );
 
   const deleteResume = async (id) => {
     if (!window.confirm("Are you sure you want to delete this resume?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/resume/delete-resume/${id}`, {
+      const res = await fetch(`${Api}/resume/delete-resume/${id}`, {
         method: "DELETE",
         headers: { "auth-token": localStorage.getItem("token") },
       });
@@ -58,7 +58,7 @@ export default function AllResumes() {
     try {
       setAiLoading(true);
       showMessage("🤖 Generating AI resume...");
-      const res = await fetch(`http://localhost:5000/resume/build-resume/${id}`, {
+      const res = await fetch(`${Api}/resume/build-resume/${id}`, {
         method: "POST",
         headers: { "auth-token": localStorage.getItem("token") },
       });

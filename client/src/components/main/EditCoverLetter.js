@@ -5,6 +5,7 @@ export default function EditCoverLetter() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const Api = process.env.REACT_APP_API_URL;
   const [coverLetter, setCoverLetter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -14,7 +15,7 @@ export default function EditCoverLetter() {
     const fetchCoverLetter = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/coverLetter/view-ai-coverLetter/${id}`,
+          `${Api}/coverLetter/view-ai-coverLetter/${id}`,
           {
             headers: {
               "auth-token": localStorage.getItem("token") || "",
@@ -36,14 +37,14 @@ export default function EditCoverLetter() {
     };
 
     fetchCoverLetter();
-  }, [id]);
+  }, );
 
   // Handle form submit
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch(
-        `http://localhost:5000/coverLetter/edit-cover-letter/${id}`,
+        `${Api}/coverLetter/edit-cover-letter/${id}`,
         {
           method: "PUT",
           headers: {

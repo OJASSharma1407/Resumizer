@@ -8,7 +8,7 @@ export default function Viewcoverletter() {
   const [aiLoading, setAiLoading] = useState(false);
   const messageTimeout = useRef(null);
   const navigate = useNavigate();
-
+  const Api = process.env.REACT_APP_API_URL;
   const showMessage = (msg) => {
     setMessage(msg);
     if (messageTimeout.current) clearTimeout(messageTimeout.current);
@@ -17,7 +17,7 @@ export default function Viewcoverletter() {
 
   const fetchCoverLetters = async () => {
     try {
-      const res = await fetch("http://localhost:5000/coverLetter/get-cover-letters", {
+      const res = await fetch(`${Api}/coverLetter/get-cover-letters`, {
         headers: { "auth-token": localStorage.getItem("token") },
       });
       const data = await res.json();
@@ -34,13 +34,13 @@ export default function Viewcoverletter() {
 
   useEffect(() => {
     fetchCoverLetters();
-  }, []);
+  }, );
 
   const deleteCoverLetter = async (id) => {
     if (!window.confirm("Are you sure you want to delete this cover letter?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/coverLetter/delete-cover-letter/${id}`, {
+      const res = await fetch(`${Api}/coverLetter/delete-cover-letter/${id}`, {
         method: "DELETE",
         headers: { "auth-token": localStorage.getItem("token") },
       });
@@ -59,7 +59,7 @@ export default function Viewcoverletter() {
     try {
       setAiLoading(true);
       showMessage("🤖 Generating AI cover letter...");
-      const res = await fetch(`http://localhost:5000/coverletter/generate-cover-letter/${id}`, {
+      const res = await fetch(`${Api}/coverletter/generate-cover-letter/${id}`, {
         method: "POST",
         headers: { "auth-token": localStorage.getItem("token") },
       });

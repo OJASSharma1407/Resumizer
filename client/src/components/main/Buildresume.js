@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function AddResume() {
+  const Api = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     personalInfo: { name: "", email: "", phone: "", github: "", linkedIn: "" },
     careerObjective: "",
@@ -84,7 +85,7 @@ const handleSubmit = async (e) => {
   console.log("Payload being sent:", payload); // Debug
 
   try {
-    const res = await fetch("http://localhost:5000/resume/add-resume-info", {
+    const res = await fetch(`${Api}/resume/add-resume-info`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

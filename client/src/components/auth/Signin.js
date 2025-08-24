@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 // Client ID must start with REACT_APP_ for CRA to read it
 const clientId = process.env.REACT_APP_CLIENT_ID;
-
+const Api = process.env.REACT_APP_API_URL;
 export default function Signin() {
   const navigate = useNavigate();
   const [fullname, setName] = useState("");
@@ -44,7 +44,7 @@ export default function Signin() {
     } else {
       initGoogle();
     }
-  }, []);
+  }, );
 
   const handleGoogleResponse = (response) => {
     // You can send response.credential to your backend for verification
@@ -57,7 +57,7 @@ export default function Signin() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/user-auth/signIn", {
+      const res = await fetch(`${Api}/user-auth/signIn`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

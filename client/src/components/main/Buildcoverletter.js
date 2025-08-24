@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function CoverLetterForm() {
+  const Api = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -18,7 +19,7 @@ export default function CoverLetterForm() {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch('http://localhost:5000/coverletter/create-cover-letter', {
+    const res = await fetch(`${Api}/coverletter/create-cover-letter`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
