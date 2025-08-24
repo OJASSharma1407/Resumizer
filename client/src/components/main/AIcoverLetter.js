@@ -35,7 +35,7 @@ export default function ViewAiCoverLetter() {
     };
 
     fetchCoverLetter();
-  }, );
+  },[id,Api] );
 
   // ✅ Delete AI Cover Letter
   const deleteCoverLetter = async () => {

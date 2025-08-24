@@ -38,7 +38,7 @@ export default function Editresume() {
       }
     };
     fetchResume();
-  }, );
+  },[id,Api] );
 
   const handleChange = (section, field, value, index = null) => {
     if (Array.isArray(formData[section])) {

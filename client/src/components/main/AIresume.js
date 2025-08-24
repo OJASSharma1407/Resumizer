@@ -31,7 +31,7 @@ export default function ViewAIResume() {
     };
 
     fetchAIResumes();
-  }, );
+  },[id,Api] );
 
   if (loading) return <div className="text-center mt-20">Loading AI resumes...</div>;
 

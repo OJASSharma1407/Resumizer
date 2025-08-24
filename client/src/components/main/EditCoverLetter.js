@@ -37,7 +37,7 @@ export default function EditCoverLetter() {
     };
 
     fetchCoverLetter();
-  }, );
+  },[id,Api] );
 
   // Handle form submit
   const handleUpdate = async (e) => {
