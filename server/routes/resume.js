@@ -219,7 +219,7 @@ Output ONLY the resume content. No greetings. No explanations. No extra text.
 
 
       const response = await cohere.chat({
-        model: 'command-r-plus',
+        model: 'command-r',
         message: prompt,
         max_tokens: 1200,
         temperature: 0.3,

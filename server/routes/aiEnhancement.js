@@ -58,7 +58,7 @@ ${resumeContent}
 `;
 
     const response = await cohere.chat({
-      model: 'command-r-plus',
+      model: 'command-r',
       message: prompt,
       max_tokens: 1500,
       temperature: 0.2
@@ -126,7 +126,7 @@ ${resumeContent}
 `;
 
     const response = await cohere.chat({
-      model: 'command-r-plus',
+      model: 'command-r',
       message: prompt,
       max_tokens: 1200,
       temperature: 0.3
@@ -197,7 +197,7 @@ ${industry || 'General'}
 `;
 
     const response = await cohere.chat({
-      model: 'command-r-plus',
+      model: 'command-r',
       message: prompt,
       max_tokens: 1000,
       temperature: 0.4

@@ -180,107 +180,148 @@ const handleSubmit = async (e) => {
           </div>
         </div>
 
-    {/* Career Objective */}
-    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
-      <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <span className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm">2</span>
-        Career Objective
-      </h3>
-      <textarea
-        placeholder="Describe your career goals and what you're looking for..."
-        className="border border-gray-200 p-4 rounded-xl w-full h-32 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm resize-none"
-        value={formData.careerObjective}
-        onChange={(e) =>
-          handleChange("careerObjective", null, e.target.value)
-        }
-      />
-    </div>
-
-    {/* Skills & Tech Stack */}
-    {["skills", "techStack"].map((field, sectionIdx) => (
-      <div key={field} className={`bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-50 to-teal-50 border-emerald-100' : 'from-amber-50 to-orange-50 border-amber-100'} p-6 rounded-2xl border`}>
-        <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <span className={`w-8 h-8 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-500 to-teal-500' : 'from-amber-500 to-orange-500'} rounded-full flex items-center justify-center text-white text-sm`}>{sectionIdx + 3}</span>
-          {field === 'skills' ? 'Core Skills' : 'Tech Stack'}
-        </h3>
-        <div className="space-y-3">
-          {formData[field].map((item, idx) => (
-            <input
-              key={idx}
-              type="text"
-              placeholder={`${field === 'skills' ? 'Skill' : 'Technology'} ${idx + 1}`}
-              className="border border-gray-200 p-4 rounded-xl w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
-              value={item}
-              onChange={(e) => handleChange(field, null, e.target.value, idx)}
+        {/* Career Objective */}
+        <div className="p-8 border-b border-gray-100">
+          <div className="flex items-center mb-8">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4">
+              2
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900">Career Objective</h3>
+              <p className="text-gray-600">Describe your professional goals</p>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">
+              Professional Summary
+            </label>
+            <textarea
+              placeholder="Write a compelling summary of your career goals, key strengths, and what you bring to potential employers..."
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all resize-none h-32"
+              value={formData.careerObjective}
+              onChange={(e) => handleChange("careerObjective", null, e.target.value)}
             />
-          ))}
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={() => addField(field, "")}
-          className={`mt-4 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600' : 'from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'} text-white px-6 py-2 rounded-xl font-medium transition-all transform hover:scale-105`}
-        >
-          + Add {field === 'skills' ? 'Skill' : 'Technology'}
-        </button>
-      </div>
-    ))}
 
-    {/* Work Experience, Projects, Education */}
-    {[
-      { name: "Work Experience", key: "workExperience", cols: 2 },
-      { name: "Projects", key: "projects", cols: 3 },
-      { name: "Education", key: "education", cols: 5 },
-    ].map((section) => (
-      <div key={section.key}>
-        <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-2">
-          {section.name}
-        </h3>
-        {formData[section.key].map((item, idx) => (
-          <div
-            key={idx}
-            className={`grid grid-cols-1 sm:grid-cols-${section.cols} gap-4 mb-2`}
-          >
-            {Object.keys(item).map((field) => (
-              <input
-                key={field}
-                type="text"
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none transition"
-                value={item[field]}
-                onChange={(e) =>
-                  handleChange(section.key, field, e.target.value, idx)
-                }
-              />
-            ))}
+        {/* Skills & Tech Stack */}
+        {["skills", "techStack"].map((field, sectionIdx) => (
+          <div key={field} className="p-8 border-b border-gray-100">
+            <div className="flex items-center mb-8">
+              <div className={`w-12 h-12 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-600 to-teal-600' : 'from-amber-600 to-orange-600'} rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4`}>
+                {sectionIdx + 3}
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{field === 'skills' ? 'Core Skills' : 'Technical Skills'}</h3>
+                <p className="text-gray-600">{field === 'skills' ? 'Your key competencies' : 'Technologies you work with'}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {formData[field].map((item, idx) => (
+                <div key={idx} className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    {field === 'skills' ? 'Skill' : 'Technology'} {idx + 1}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={`Enter ${field === 'skills' ? 'skill' : 'technology'}`}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    value={item}
+                    onChange={(e) => handleChange(field, null, e.target.value, idx)}
+                  />
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addField(field, "")}
+              className={`mt-6 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700' : 'from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700'} text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105`}
+            >
+              + Add {field === 'skills' ? 'Skill' : 'Technology'}
+            </button>
           </div>
         ))}
-        <button
-          type="button"
-          onClick={() =>
-            addField(
-              section.key,
-              section.key === "workExperience"
-                ? { role: "", duration: "", company: "", description: "" }
-                : section.key === "projects"
-                ? { title: "", description: "", link: "" }
-                : { degree: "", fieldOfStudy: "", institution: "", startYear: "", endYear: "" }
-            )
-          }
-          className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition"
-        >
-          + Add {section.name.slice(0, -1)}
-        </button>
-      </div>
-    ))}
+
+        {/* Work Experience, Projects, Education */}
+        {[
+          { name: "Work Experience", key: "workExperience", icon: "💼", gradient: "from-indigo-600 to-blue-600" },
+          { name: "Projects", key: "projects", icon: "🚀", gradient: "from-green-600 to-emerald-600" },
+          { name: "Education", key: "education", icon: "🎓", gradient: "from-red-600 to-pink-600" },
+        ].map((section, sectionIdx) => (
+          <div key={section.key} className="p-8 border-b border-gray-100 last:border-b-0">
+            <div className="flex items-center mb-8">
+              <div className={`w-12 h-12 bg-gradient-to-r ${section.gradient} rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4`}>
+                {sectionIdx + 5}
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{section.name}</h3>
+                <p className="text-gray-600">Add your {section.name.toLowerCase()}</p>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              {formData[section.key].map((item, idx) => (
+                <div key={idx} className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.keys(item).map((field) => (
+                      <div key={field} className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700 capitalize">
+                          {field.replace(/([A-Z])/g, ' $1')}
+                        </label>
+                        {field === 'description' ? (
+                          <textarea
+                            placeholder={`Enter ${field}`}
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none h-24"
+                            value={item[field]}
+                            onChange={(e) => handleChange(section.key, field, e.target.value, idx)}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            placeholder={`Enter ${field}`}
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            value={item[field]}
+                            onChange={(e) => handleChange(section.key, field, e.target.value, idx)}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <button
+              type="button"
+              onClick={() =>
+                addField(
+                  section.key,
+                  section.key === "workExperience"
+                    ? { role: "", duration: "", company: "", description: "" }
+                    : section.key === "projects"
+                    ? { title: "", description: "", link: "" }
+                    : { degree: "", fieldOfStudy: "", institution: "", startYear: "", endYear: "" }
+                )
+              }
+              className={`mt-6 bg-gradient-to-r ${section.gradient} text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105`}
+            >
+              + Add {section.name === "Work Experience" ? "Experience" : section.name.slice(0, -1)}
+            </button>
+          </div>
+        ))}
 
         {/* Submit Button */}
-        <div className="p-8 bg-gray-50">
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl"
-          >
-            Create My Resume
-          </button>
+        <div className="p-8 bg-gradient-to-r from-gray-900 to-blue-900">
+          <div className="text-center">
+            <h4 className="text-2xl font-bold text-white mb-4">Ready to Create Your Resume?</h4>
+            <p className="text-white/80 mb-8">Your professional resume will be generated using AI technology</p>
+            <button
+              type="submit"
+              className="bg-white text-gray-900 px-12 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+            >
+              🚀 Create My Professional Resume
+            </button>
+          </div>
         </div>
       </form>
     </div>
