@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/extra/ProtectedRoutes";
 import MainLayout from "./components/extra/MainLayout";
 import Dashboard from "./components/main/Dashboard";
@@ -15,26 +16,28 @@ import ViewAiCoverLetter from "./components/main/AIcoverLetter";
 
 function App() {
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Signin />} />
-      <Route path="/login" element={<Login />} />
+    <AuthProvider>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Signin />} />
+        <Route path="/login" element={<Login />} />
 
-      {/* Protected routes */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/build-resume" element={<Buildresume />} />
-          <Route path="/view-resume" element={<Viewresume />} />
-          <Route path="/build-cover-letter" element={<Buildcoverletter />} />
-          <Route path="/view-cover-letter" element={<Viewcoverletter />} />  
-          <Route path="/edit-resume/:id" element={<Editresume />} />  
-          <Route path="/view-ai-resume/:id" element={<AIresume/>}/>           
-          <Route path="/edit-cover-letter/:id" element={<EditCoverLetter/>}/>
-          <Route path="/view-Aicover-letter/:id" element={<ViewAiCoverLetter/>}/>    
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/build-resume" element={<Buildresume />} />
+            <Route path="/view-resume" element={<Viewresume />} />
+            <Route path="/build-cover-letter" element={<Buildcoverletter />} />
+            <Route path="/view-cover-letter" element={<Viewcoverletter />} />  
+            <Route path="/edit-resume/:id" element={<Editresume />} />  
+            <Route path="/view-ai-resume/:id" element={<AIresume/>}/>           
+            <Route path="/edit-cover-letter/:id" element={<EditCoverLetter/>}/>
+            <Route path="/view-Aicover-letter/:id" element={<ViewAiCoverLetter/>}/>    
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </AuthProvider>
   );
 }
 

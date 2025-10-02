@@ -5,8 +5,20 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 5000;
 const path = require('path'); 
-const cors =  require("cors");
-app.use(cors());
+const cors = require("cors");
+
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001', 
+    'https://resumizer-fpdb.onrender.com'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 //middleWare
 app.use(express.json());
 
@@ -17,6 +29,7 @@ app.use('/user-auth',require('./routes/userAuth'));
 app.use('/resume',require('./routes/resume'));
 app.use('/aboutResume',require('./routes/resumeOperation'));
 app.use('/coverletter',require('./routes/coverletter'));
+app.use('/ai',require('./routes/aiEnhancement'));
 
 
 //app listning on port 5000

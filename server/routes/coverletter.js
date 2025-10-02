@@ -50,33 +50,52 @@ router.post('/generate-cover-letter/:id', fetchuser, async (req, res) => {
     const { personalInfo, description } = existing;
 
    const prompt = `
-You are a professional cover letter writing assistant. Generate a **one-page, well-formatted, formal cover letter** based on the candidate's details and description below.
+You are an expert cover letter writer specializing in creating compelling, personalized cover letters that get results.
 
-🔥 STRICT RULES:
-- ONLY return the cover letter — NO extra text, instructions, or commentary.
-- Start with the current date and a formal greeting (e.g., "Dear Hiring Manager" or based on company if known).
-- Use the candidate's name, contact information, and description to tailor the letter.
-- Highlight relevant skills, education, and projects that align with the job.
-- End with a strong closing paragraph and a professional sign-off (e.g., "Sincerely, [Full Name]").
-- Use clear formatting, line breaks between paragraphs, and keep the tone formal yet enthusiastic.
-- Make sure it sounds like it's written by a real person.
+🎯 MISSION: Create a professional, engaging cover letter that:
+- Captures the hiring manager's attention immediately
+- Demonstrates genuine interest and research about the role/company
+- Highlights the candidate's most relevant qualifications
+- Shows personality while maintaining professionalism
+- Includes a strong call-to-action
 
-🧾 CANDIDATE INFORMATION:
-Full Name: ${personalInfo.fullName}
+📋 FORMAT REQUIREMENTS:
+- Start with today's date
+- Professional greeting ("Dear Hiring Manager" or specific name if provided)
+- 3-4 compelling paragraphs with clear structure:
+  1. Opening hook + position interest
+  2. Relevant experience + key achievements
+  3. Skills alignment + value proposition
+  4. Strong closing + next steps
+- Professional sign-off with full name
+- NO extra commentary or explanations
+
+👤 CANDIDATE PROFILE:
+Name: ${personalInfo.fullName}
 Email: ${personalInfo.email}
 Phone: ${personalInfo.phone}
-GitHub: ${personalInfo.github}
-LinkedIn: ${personalInfo.linkedIn}
+GitHub: ${personalInfo.github || 'Not provided'}
+LinkedIn: ${personalInfo.linkedIn || 'Not provided'}
 
-📄 JOB DESCRIPTION / CANDIDATE SUMMARY:
+💼 ROLE & REQUIREMENTS:
 ${description}
+
+🚀 ENHANCEMENT GUIDELINES:
+- Use specific examples and quantifiable achievements
+- Match language and keywords from the job description
+- Show enthusiasm and cultural fit
+- Demonstrate research about the company/role
+- Keep tone confident but not arrogant
+- Ensure ATS-friendly formatting
+
+⚠️ OUTPUT ONLY THE COMPLETE COVER LETTER
 `;
 
     const response = await cohere.generate({
-      model: 'command',
+      model: 'command-r-plus',
       prompt,
-      max_tokens: 800,
-      temperature: 0.7
+      max_tokens: 1000,
+      temperature: 0.4
     });
 
     const generatedLetter = response.generations?.[0]?.text?.trim();

@@ -166,7 +166,7 @@ router.post('/build-resume/:id',fetchuser,async(req,res)=>{
     } = resume;
 
 const prompt = `
-You are not a chatbot. You are a professional resume formatter.
+You are an expert ATS-optimized resume writer specializing in creating professional, impactful resumes.
 
 ⚠️ Your output must be ONLY the resume. No extra sentences, no introductions, no closing remarks, no commentary.
 Do not say "Here is...", "I hope...", "Let me know...", or anything similar.
@@ -219,10 +219,10 @@ Output ONLY the resume content. No greetings. No explanations. No extra text.
 
 
       const response = await cohere.generate({
-        model: 'command',
+        model: 'command-r-plus',
         prompt: prompt,
-        max_tokens: 800,
-        temperature: 0.7,
+        max_tokens: 1200,
+        temperature: 0.3,
       });
        const aiResponse = response.generations[0].text;
        const saveaiResponse = new ResumeOperation({

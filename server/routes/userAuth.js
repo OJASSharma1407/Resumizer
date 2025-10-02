@@ -38,7 +38,14 @@ router.post('/signIn',[
             id: newUser.id
         }
         const token = jwt.sign(data,secret);
-        res.send(token);
+        res.json({ 
+            token, 
+            user: { 
+                id: newUser._id, 
+                fullname: newUser.fullname, 
+                email: newUser.email 
+            } 
+        });
 
     }catch(err){
         res.status(400).json({error:err.message});    
@@ -75,7 +82,14 @@ router.post('/logIn',[
             id: user.id
         }
         const token = jwt.sign(data,secret);
-        res.send(token);
+        res.json({ 
+            token, 
+            user: { 
+                id: user._id, 
+                fullname: user.fullname, 
+                email: user.email 
+            } 
+        });
 
     }catch(err){
         res.status(400).json({error:err.message});    
@@ -85,7 +99,7 @@ router.post('/logIn',[
 //--------Google Login-------//
 router.post('/google', async (req, res) => {
     try {
-        const { credential } = req.body;// This is the token from frontend
+        const { credential } = req.body;
         if (!credential) {
             return res.status(400).json({ error: "No token provided" });
         }         
@@ -95,27 +109,55 @@ router.post('/google', async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        const { email, name } = payload;  // sub = Google's user ID
-        const pass = await bcrypt.hash(clientId,10);
-        // Check if user exists
+        const { email, name, sub } = payload;
+        const pass = await bcrypt.hash(sub, 10);
+        
         let user = await User.findOne({ email });
 
         if (!user) {
-            // Create user if not exists
             const newUser = new User({
                 fullname: name,
                 email,
-                password:pass   // Save Google user ID as password placeholder
+                password: pass,
+                googleId: sub
             });
             user = await newUser.save();
         }
 
         const data = { id: user.id };
         const token = jwt.sign(data, secret);
-        res.send({ token });
+        res.json({ 
+            token, 
+            user: { 
+                id: user._id, 
+                fullname: user.fullname, 
+                email: user.email 
+            } 
+        });
 
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+//--------Verify Token-------//
+router.get('/verify', async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        const decoded = jwt.verify(token, secret);
+        const user = await User.findById(decoded.id).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid token' });
     }
 });
 
