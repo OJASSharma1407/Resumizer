@@ -110,44 +110,74 @@ const handleSubmit = async (e) => {
 
   return (
     
-<div className="pt-20 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-  <div className="max-w-5xl mx-auto p-6">
-    <div className="text-center mb-8">
-      <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-        Build Your Resume
-      </h2>
-      <p className="text-gray-600 text-lg">Create a professional resume that stands out</p>
-    </div>
-
-    {message && (
-      <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-xl shadow-lg text-center font-medium">
-        {message}
+<div className="min-h-screen bg-white">
+  {/* Header Section */}
+  <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
+    <div className="absolute inset-0 bg-black/20"></div>
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+      <div className="text-center">
+        <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/80 text-sm font-medium mb-8">
+          <FileText className="w-4 h-4 mr-2" />
+          Resume Builder
+        </div>
+        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+          Build Your
+          <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Professional Resume
+          </span>
+        </h1>
+        <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          Create a standout resume with our AI-powered builder
+        </p>
       </div>
-    )}
+    </div>
+  </section>
 
-    <form onSubmit={handleSubmit} className="space-y-8 bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20">
+  {/* Form Section */}
+  <section className="py-24 bg-gray-50">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {message && (
+        <div className="mb-8 p-6 bg-white border-l-4 border-blue-600 rounded-2xl shadow-lg">
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-4">
+              <CheckCircle2 className="w-5 h-5 text-white" />
+            </div>
+            <p className="text-gray-800 font-medium">{message}</p>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl overflow-hidden">
     
-    {/* Personal Info */}
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
-      <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-        <span className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm">1</span>
-        Personal Information
-      </h3>
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-        {Object.keys(formData.personalInfo).map((key) => (
-          <input
-            key={key}
-            type="text"
-            placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-            className="border border-gray-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
-            value={formData.personalInfo[key]}
-            onChange={(e) =>
-              handleChange("personalInfo", key, e.target.value)
-            }
-          />
-        ))}
-      </div>
-    </div>
+        {/* Personal Info */}
+        <div className="p-8 border-b border-gray-100">
+          <div className="flex items-center mb-8">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4">
+              1
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900">Personal Information</h3>
+              <p className="text-gray-600">Tell us about yourself</p>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
+            {Object.keys(formData.personalInfo).map((key) => (
+              <div key={key} className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 capitalize">
+                  {key.replace(/([A-Z])/g, ' $1')}
+                </label>
+                <input
+                  type="text"
+                  placeholder={`Enter your ${key.toLowerCase()}`}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  value={formData.personalInfo[key]}
+                  onChange={(e) => handleChange("personalInfo", key, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
 
     {/* Career Objective */}
     <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
@@ -242,17 +272,18 @@ const handleSubmit = async (e) => {
       </div>
     ))}
 
-    {/* Submit Button */}
-    <div className="text-center pt-6">
-      <button
-        type="submit"
-        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-12 py-4 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl"
-      >
-        🚀 Create My Resume
-      </button>
+        {/* Submit Button */}
+        <div className="p-8 bg-gray-50">
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-xl"
+          >
+            Create My Resume
+          </button>
+        </div>
+      </form>
     </div>
-    </form>
-  </div>
+  </section>
 </div>
 
   );

@@ -53,81 +53,114 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* HERO */}
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-6"
-        >
-          <Sparkles className="mx-auto text-blue-500 mb-4" size={60} />
-        </motion.div>
-        
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-6xl font-bold max-w-4xl"
-        >
-          Welcome back, <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{user?.fullname || 'User'}</span>
-        </motion.h1>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-6 text-xl text-gray-600 max-w-2xl"
-        >
-          Ready to create your next career-winning resume? Let's build something amazing together.
-        </motion.p>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="mt-10 flex gap-4 flex-wrap justify-center"
-        >
-          <button
-            onClick={() => navigate("/build-resume")}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg"
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            Create Resume <ArrowRight size={20} />
-          </button>
-          <button
-            onClick={() => navigate("/build-cover-letter")}
-            className="bg-white text-gray-700 font-semibold px-8 py-4 rounded-xl hover:bg-gray-50 transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg border"
-          >
-            Write Cover Letter <PenTool size={20} />
-          </button>
-        </motion.div>
+            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/80 text-sm font-medium mb-8">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Professional Resume Builder
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+              Welcome back,
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {user?.fullname || 'Professional'}
+              </span>
+            </h1>
+            
+            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-12">
+              Transform your career with AI-powered resumes that get you noticed by top employers
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => navigate("/build-resume")}
+                className="group relative px-8 py-4 bg-white text-gray-900 font-semibold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Create Resume
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+              <button
+                onClick={() => navigate("/build-cover-letter")}
+                className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <PenTool className="w-5 h-5" />
+                  Write Cover Letter
+                </span>
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* QUICK ACTIONS */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+            <p className="text-xl text-gray-600">Everything you need to build your career</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Build Resume", desc: "Create a new resume from scratch", icon: <FileText size={24} />, action: () => navigate("/build-resume"), color: "from-blue-500 to-blue-600" },
-              { title: "View Resumes", desc: "Manage your existing resumes", icon: <MessageSquare size={24} />, action: () => navigate("/view-resume"), color: "from-emerald-500 to-emerald-600" },
-              { title: "Cover Letters", desc: "Create compelling cover letters", icon: <PenTool size={24} />, action: () => navigate("/build-cover-letter"), color: "from-purple-500 to-purple-600" }
+              { 
+                title: "Build Resume", 
+                desc: "Create a professional resume with AI assistance", 
+                icon: <FileText className="w-8 h-8" />, 
+                action: () => navigate("/build-resume"), 
+                gradient: "from-blue-600 to-blue-700",
+                bg: "bg-blue-50",
+                border: "border-blue-200"
+              },
+              { 
+                title: "My Resumes", 
+                desc: "View and manage your existing resumes", 
+                icon: <MessageSquare className="w-8 h-8" />, 
+                action: () => navigate("/view-resume"), 
+                gradient: "from-emerald-600 to-emerald-700",
+                bg: "bg-emerald-50",
+                border: "border-emerald-200"
+              },
+              { 
+                title: "Cover Letters", 
+                desc: "Write compelling cover letters that get noticed", 
+                icon: <PenTool className="w-8 h-8" />, 
+                action: () => navigate("/build-cover-letter"), 
+                gradient: "from-purple-600 to-purple-700",
+                bg: "bg-purple-50",
+                border: "border-purple-200"
+              }
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
                 onClick={item.action}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all cursor-pointer transform hover:scale-105 border border-gray-100"
+                className={`group cursor-pointer bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 ${item.border} hover:border-opacity-50`}
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${item.color} flex items-center justify-center text-white mb-4`}>
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${item.gradient} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                <div className="mt-6 flex items-center text-gray-400 group-hover:text-gray-600 transition-colors">
+                  <span className="text-sm font-medium">Get started</span>
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </div>
               </motion.div>
             ))}
           </div>
@@ -135,31 +168,73 @@ export default function Dashboard() {
       </section>
 
       {/* FEATURES */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-16 text-gray-800">Everything You Need</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                onClick={f.action}
-                className={`bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all ${f.action ? 'cursor-pointer transform hover:scale-105' : ''} border border-gray-100`}
-              >
-                <div className="mb-6">{f.icon}</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">{f.title}</h3>
-                <p className="text-gray-600 mb-2">{f.desc1}</p>
-                <p className="text-gray-500 text-sm">{f.desc2}</p>
-                {f.action && (
-                  <div className="mt-4 flex items-center text-blue-600 font-medium">
-                    Try it now <ArrowRight size={16} className="ml-1" />
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Everything you need to create professional resumes that stand out from the competition
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              {features.slice(0, 3).map((f, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                  onClick={f.action}
+                  className={`group flex items-start gap-6 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 ${f.action ? 'cursor-pointer' : ''}`}
+                >
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                      {React.cloneElement(f.icon, { size: 24, className: "text-white" })}
+                    </div>
                   </div>
-                )}
-              </motion.div>
-            ))}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{f.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{f.desc1}</p>
+                    {f.action && (
+                      <div className="mt-3 flex items-center text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-sm">Try it now</span>
+                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
+                <div className="space-y-6">
+                  {features.slice(3).map((f, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: (i + 3) * 0.1, duration: 0.6 }}
+                      onClick={f.action}
+                      className={`group flex items-start gap-4 p-4 rounded-xl hover:bg-white/10 transition-all duration-300 ${f.action ? 'cursor-pointer' : ''}`}
+                    >
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                          {React.cloneElement(f.icon, { size: 20, className: "text-white" })}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold mb-1">{f.title}</h4>
+                        <p className="text-white/80 text-sm">{f.desc1}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

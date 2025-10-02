@@ -57,14 +57,14 @@ ${resumeContent}
 ⚠️ OUTPUT ONLY THE STRUCTURED FEEDBACK - NO EXTRA TEXT
 `;
 
-    const response = await cohere.generate({
+    const response = await cohere.chat({
       model: 'command-r-plus',
-      prompt,
+      message: prompt,
       max_tokens: 1500,
       temperature: 0.2
     });
 
-    const feedback = response.generations?.[0]?.text?.trim();
+    const feedback = response.text?.trim();
 
     if (!feedback) {
       return res.status(500).json({ error: "AI failed to generate feedback" });
@@ -125,14 +125,14 @@ ${resumeContent}
 ⚠️ OUTPUT ONLY THE STRUCTURED ANALYSIS - NO EXTRA TEXT
 `;
 
-    const response = await cohere.generate({
+    const response = await cohere.chat({
       model: 'command-r-plus',
-      prompt,
+      message: prompt,
       max_tokens: 1200,
       temperature: 0.3
     });
 
-    const analysis = response.generations?.[0]?.text?.trim();
+    const analysis = response.text?.trim();
 
     if (!analysis) {
       return res.status(500).json({ error: "AI failed to generate job matching analysis" });
@@ -196,14 +196,14 @@ ${industry || 'General'}
 ⚠️ OUTPUT ONLY THE STRUCTURED ROADMAP - NO EXTRA TEXT
 `;
 
-    const response = await cohere.generate({
+    const response = await cohere.chat({
       model: 'command-r-plus',
-      prompt,
+      message: prompt,
       max_tokens: 1000,
       temperature: 0.4
     });
 
-    const roadmap = response.generations?.[0]?.text?.trim();
+    const roadmap = response.text?.trim();
 
     if (!roadmap) {
       return res.status(500).json({ error: "AI failed to generate skills roadmap" });

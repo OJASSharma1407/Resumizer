@@ -91,14 +91,14 @@ ${description}
 ⚠️ OUTPUT ONLY THE COMPLETE COVER LETTER
 `;
 
-    const response = await cohere.generate({
+    const response = await cohere.chat({
       model: 'command-r-plus',
-      prompt,
+      message: prompt,
       max_tokens: 1000,
       temperature: 0.4
     });
 
-    const generatedLetter = response.generations?.[0]?.text?.trim();
+    const generatedLetter = response.text?.trim();
 
     if (!generatedLetter) {
       return res.status(500).json({ error: "AI failed to generate the cover letter." });
