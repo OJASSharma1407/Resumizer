@@ -92,7 +92,7 @@ ${description}
 `;
 
     const response = await cohere.chat({
-      model: 'command-r',
+      model: 'command-r-plus',
       message: prompt,
       max_tokens: 1000,
       temperature: 0.4
