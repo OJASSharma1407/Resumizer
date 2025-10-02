@@ -110,43 +110,54 @@ const handleSubmit = async (e) => {
 
   return (
     
-<div className="pt-20 max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen">
-  <h2 className="text-3xl font-extrabold mb-8 text-center text-indigo-600">
-    Add Resume Info
-  </h2>
-
-  {message && (
-    <div className="mb-6 p-4 bg-indigo-100 text-indigo-800 rounded-lg shadow text-center font-medium transition-all duration-300">
-      {message}
+<div className="pt-20 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  <div className="max-w-5xl mx-auto p-6">
+    <div className="text-center mb-8">
+      <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+        Build Your Resume
+      </h2>
+      <p className="text-gray-600 text-lg">Create a professional resume that stands out</p>
     </div>
-  )}
 
-  <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-2xl shadow-lg">
+    {message && (
+      <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 rounded-xl shadow-lg text-center font-medium">
+        {message}
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-8 bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20">
     
     {/* Personal Info */}
-    <h3 className="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">
-      Personal Information
-    </h3>
-    <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-      {Object.keys(formData.personalInfo).map((key) => (
-        <input
-          key={key}
-          type="text"
-          placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-          className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none transition"
-          value={formData.personalInfo[key]}
-          onChange={(e) =>
-            handleChange("personalInfo", key, e.target.value)
-          }
-        />
-      ))}
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+      <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <span className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm">1</span>
+        Personal Information
+      </h3>
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
+        {Object.keys(formData.personalInfo).map((key) => (
+          <input
+            key={key}
+            type="text"
+            placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+            className="border border-gray-200 p-4 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+            value={formData.personalInfo[key]}
+            onChange={(e) =>
+              handleChange("personalInfo", key, e.target.value)
+            }
+          />
+        ))}
+      </div>
     </div>
 
     {/* Career Objective */}
-    <div>
+    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
+      <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+        <span className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm">2</span>
+        Career Objective
+      </h3>
       <textarea
-        placeholder="Career Objective"
-        className="border border-gray-300 p-3 rounded-lg w-full h-24 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition"
+        placeholder="Describe your career goals and what you're looking for..."
+        className="border border-gray-200 p-4 rounded-xl w-full h-32 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm resize-none"
         value={formData.careerObjective}
         onChange={(e) =>
           handleChange("careerObjective", null, e.target.value)
@@ -155,27 +166,30 @@ const handleSubmit = async (e) => {
     </div>
 
     {/* Skills & Tech Stack */}
-    {["skills", "techStack"].map((field) => (
-      <div key={field}>
-        <h3 className="text-xl font-semibold text-gray-700 mt-4 mb-2 capitalize">
-          {field.replace(/([A-Z])/g, " $1")}
+    {["skills", "techStack"].map((field, sectionIdx) => (
+      <div key={field} className={`bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-50 to-teal-50 border-emerald-100' : 'from-amber-50 to-orange-50 border-amber-100'} p-6 rounded-2xl border`}>
+        <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <span className={`w-8 h-8 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-500 to-teal-500' : 'from-amber-500 to-orange-500'} rounded-full flex items-center justify-center text-white text-sm`}>{sectionIdx + 3}</span>
+          {field === 'skills' ? 'Core Skills' : 'Tech Stack'}
         </h3>
-        {formData[field].map((item, idx) => (
-          <input
-            key={idx}
-            type="text"
-            placeholder={`${field.slice(0, -1)} ${idx + 1}`}
-            className="border border-gray-300 p-3 rounded-lg w-full mb-2 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition"
-            value={item}
-            onChange={(e) => handleChange(field, null, e.target.value, idx)}
-          />
-        ))}
+        <div className="space-y-3">
+          {formData[field].map((item, idx) => (
+            <input
+              key={idx}
+              type="text"
+              placeholder={`${field === 'skills' ? 'Skill' : 'Technology'} ${idx + 1}`}
+              className="border border-gray-200 p-4 rounded-xl w-full focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/70 backdrop-blur-sm"
+              value={item}
+              onChange={(e) => handleChange(field, null, e.target.value, idx)}
+            />
+          ))}
+        </div>
         <button
           type="button"
           onClick={() => addField(field, "")}
-          className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition mt-1"
+          className={`mt-4 bg-gradient-to-r ${sectionIdx === 0 ? 'from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600' : 'from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'} text-white px-6 py-2 rounded-xl font-medium transition-all transform hover:scale-105`}
         >
-          + Add {field.slice(0, -1)}
+          + Add {field === 'skills' ? 'Skill' : 'Technology'}
         </button>
       </div>
     ))}
@@ -229,13 +243,16 @@ const handleSubmit = async (e) => {
     ))}
 
     {/* Submit Button */}
-    <button
-      type="submit"
-      className="w-full bg-blue-600 text-white px-4 py-3 rounded-2xl font-semibold hover:bg-blue-700 transition mt-6"
-    >
-      Add Resume
-    </button>
-  </form>
+    <div className="text-center pt-6">
+      <button
+        type="submit"
+        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-12 py-4 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-xl"
+      >
+        🚀 Create My Resume
+      </button>
+    </div>
+    </form>
+  </div>
 </div>
 
   );

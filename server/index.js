@@ -15,8 +15,9 @@ const corsOptions = {
     "https://resumizer-eight.vercel.app"
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token', 'x-auth-token'],
+  exposedHeaders: ['auth-token']
 };
 
 app.use(cors(corsOptions));
