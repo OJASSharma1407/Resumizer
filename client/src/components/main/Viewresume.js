@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { CheckCircle2, MessageSquare, FileText } from "lucide-react";
 
 export default function AllResumes() {
   const [resumes, setResumes] = useState([]);
