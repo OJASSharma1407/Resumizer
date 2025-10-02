@@ -165,22 +165,6 @@ router.delete('/delete-cover-letter/:id', fetchuser, async (req, res) => {
 });
 
 
-// Delete a cover letter by ID
-router.delete('/delete-cover-letter/:id', fetchuser, async (req, res) => {
-  try {
-    const coverLetter = await CoverLetter.findOne({ _id: req.params.id, user: req.user.id });
-    if (!coverLetter) {
-      return res.status(404).json({ success: false, error: "Cover letter not found" });
-    }
-    await coverLetter.deleteOne();
-    res.status(200).json({ success: true, message: "Cover letter deleted successfully" });
-  } catch (err) {
-    console.error("Delete Cover Letter Error:", err);
-    res.status(500).json({ success: false, error: "Server error while deleting cover letter" });
-  }
-});
-
-
 // ✅ API: Remove only the "coverletter" field
 router.put("/remove-coverletter/:id", fetchuser, async (req, res) => {
   try {
@@ -212,9 +196,6 @@ router.put("/remove-coverletter/:id", fetchuser, async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
 //-------Get-Ai-CoverLetter----------//
 router.get('/view-ai-coverLetter/:id', fetchuser, async (req, res) => {
   const letterId = req.params.id;
@@ -234,20 +215,19 @@ router.get('/view-ai-coverLetter/:id', fetchuser, async (req, res) => {
   }
 });
 
-
 //-------Download CoverLetter--------//
 router.get('/download-cover-letter/:id', fetchuser, async (req, res) => {
   try {
-    const coverL = await CoverLetter.findById(req.params.id );
+    const coverL = await CoverLetter.findById(req.params.id);
 
     if (!coverL) {
-      return res.status(404).json({ success: false, error: "Refined resume not found" });
+      return res.status(404).json({ success: false, error: "Cover letter not found" });
     }
 
     const doc = new PDFDocument();
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=refined-resume.pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=cover-letter.pdf');
 
     doc.pipe(res);
     doc.fontSize(12).text(coverL.coverletter || 'No content found');
