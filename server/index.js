@@ -7,20 +7,33 @@ const port = 5000;
 const path = require('path'); 
 const cors = require("cors");
 
-const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001', 
-    'https://resumizer-fpdb.onrender.com',
-    "https://resumizer-eight.vercel.app"
-  ],
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001', 
+      'https://resumizer-fpdb.onrender.com',
+      'https://resumizer-eight.vercel.app'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token', 'x-auth-token'],
-  exposedHeaders: ['auth-token']
-};
+  allowedHeaders: ['*'],
+  exposedHeaders: ['*']
+}));
 
-app.use(cors(corsOptions));
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
 //middleWare
 app.use(express.json());
 
