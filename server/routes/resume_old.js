@@ -168,15 +168,16 @@ router.post('/build-resume/:id',fetchuser,async(req,res)=>{
 const prompt = `
 You are an expert ATS-optimized resume writer specializing in creating professional, impactful resumes.
 
-⚠️ CRITICAL FORMATTING RULES:
-- NO markdown symbols (no #, *, **, -, etc.)
-- NO special characters for formatting
-- Use PLAIN TEXT only with proper spacing
-- Section titles in ALL CAPS followed by colon
-- Use bullet points with • symbol only
-- Clear line breaks between sections
-- Professional spacing and alignment
-- Output ONLY plain text suitable for PDF
+⚠️ Your output must be ONLY the resume. No extra sentences, no introductions, no closing remarks, no commentary.
+Do not say "Here is...", "I hope...", "Let me know...", or anything similar.
+Do not add quotes or explanations.
+Do not output anything except the formatted resume.
+
+Format rules:
+- Professional layout with spacing and bullet points
+- Section titles in ALL CAPS (e.g., OBJECTIVE, SKILLS, EDUCATION)
+- Use clear line breaks between sections
+- Use only the candidate’s data provided
 
 ==========================
 CANDIDATE DETAILS:
@@ -213,7 +214,7 @@ ${education.map((edu) => (
 ==========================
 
 ⚠️ FINAL RULE:
-Output ONLY plain text resume content. No markdown. No greetings. No explanations.
+Output ONLY the resume content. No greetings. No explanations. No extra text.
 `;
 
 
