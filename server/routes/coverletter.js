@@ -92,7 +92,7 @@ ${description}
 `;
 
     const response = await cohere.chat({
-      model: 'command-a-03-2025',
+      model: 'command-r-plus-08-2024',
       message: prompt,
       max_tokens: 1000,
       temperature: 0.4
